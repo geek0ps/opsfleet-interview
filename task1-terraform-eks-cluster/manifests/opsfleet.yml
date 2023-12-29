@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aws-s3-access
+  namespace: default
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::132717824117:role/opsfleet-oidc
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: opsfleet-ui
+  namespace: default
+spec:
+  serviceAccountName: aws-s3-access
+  containers:
+  - name: opsfleet
+    image: nginx
