@@ -1,5 +1,8 @@
-data "aws_vpc" "opsfleet-vpc" {
-  id = var.vpc_id
+resource "aws_vpc" "opsfleet-vpc" {
+  cidr_block = var.cidr_block
+  tags = {
+    Name = "Opsfleet-VPC"
+  }
 }
 
 data "aws_iam_policy_document" "ec2_assume_role" {
@@ -34,7 +37,7 @@ resource "aws_eip" "eks_eip" {
 }
 
 resource "aws_internet_gateway" "internet_gateway" {
-  vpc_id = data.aws_vpc.opsfleet-vpc.id
+  vpc_id = aws_vpc.opsfleet-vpc.id
   tags = {
     Name = "opsfleet-igw"
   }
@@ -49,7 +52,7 @@ resource "aws_nat_gateway" "nat_gateway" {
 }
 
 resource "aws_route_table" "public_route_table" {
-  vpc_id = data.aws_vpc.opsfleet-vpc.id
+  vpc_id = aws_vpc.opsfleet-vpc.id
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.internet_gateway.id
@@ -61,7 +64,7 @@ resource "aws_route_table" "public_route_table" {
 }
 
 resource "aws_route_table" "private_route_table" {
-  vpc_id = data.aws_vpc.opsfleet-vpc.id
+  vpc_id = aws_vpc.opsfleet-vpc.id
   route {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.nat_gateway.id
@@ -73,7 +76,7 @@ resource "aws_route_table" "private_route_table" {
 
 
 resource "aws_subnet" "opsfleet-public-subnet-1" {
-  vpc_id            = data.aws_vpc.opsfleet-vpc.id
+  vpc_id            = aws_vpc.opsfleet-vpc.id
   availability_zone = "us-east-1a"
   cidr_block        = cidrsubnet(data.aws_vpc.opsfleet-vpc.cidr_block, 8, 0)
   tags = {
@@ -82,7 +85,7 @@ resource "aws_subnet" "opsfleet-public-subnet-1" {
 }
 
 resource "aws_subnet" "opsfleet-public-subnet-2" {
-  vpc_id            = data.aws_vpc.opsfleet-vpc.id
+  vpc_id            = aws_vpc.opsfleet-vpc.id
   availability_zone = "us-east-1b"
   cidr_block        = cidrsubnet(data.aws_vpc.opsfleet-vpc.cidr_block, 8, 1)
   tags = {
@@ -91,7 +94,7 @@ resource "aws_subnet" "opsfleet-public-subnet-2" {
 }
 
 resource "aws_subnet" "opsfleet-private-subnet-1" {
-  vpc_id            = data.aws_vpc.opsfleet-vpc.id
+  vpc_id            = aws_vpc.opsfleet-vpc.id
   availability_zone = "us-east-1a"
   cidr_block        = cidrsubnet(data.aws_vpc.opsfleet-vpc.cidr_block, 8, 2)
   tags = {
@@ -100,7 +103,7 @@ resource "aws_subnet" "opsfleet-private-subnet-1" {
 }
 
 resource "aws_subnet" "opsfleet-private-subnet-2" {
-  vpc_id            = data.aws_vpc.opsfleet-vpc.id
+  vpc_id            = aws_vpc.opsfleet-vpc.id
   availability_zone = "us-east-1b"
   cidr_block        = cidrsubnet(data.aws_vpc.opsfleet-vpc.cidr_block, 8, 3)
   tags = {

@@ -1,5 +1,5 @@
-variable "vpc_id" {
-  default = "vpc-0b2094051b2091c29"
+variable "cidr_block" {
+  default = "10.0.0.0/16"
 }
 variable "cluster_name" {
   type        = string
