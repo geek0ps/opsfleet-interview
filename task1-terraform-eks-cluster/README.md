@@ -5,7 +5,7 @@ This repository contains Terraform configurations for deploying Opsfleet EKS clu
 ## Prerequisites
 
 - AWS CLI installed and configured
-- Terraform >= 5.31.0
+- Terraform >= 1.5.7
 - kubectl configured to interact with your Kubernetes cluster
 - AWS account with necessary permissions
 
